@@ -1,0 +1,61 @@
+version: '3.9'
+services:
+  demo-mongo:
+    container_name: demo-mongo
+    image: 'mongo:6.0.5'
+    restart: unless-stopped
+    env_file: ./.env
+    ports:  #public for access follow: {hostIP}:{MONGODB_HOST_PORT}
+      - $MONGODB_HOST_PORT:$MONGODB_PORT
+    expose:
+      - $MONGODB_HOST_PORT
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGODB_DATABASE
+    volumes:
+      - demo_db:/data/db
+      - demo_db:/root/dump
+    networks:
+      - default
+
+  demo-nginx:
+    container_name: demo-nginx
+    env_file: ./.env
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx/conf.d/nodejs.conf:/etc/nginx/conf.d/demo_nodejs.conf
+    depends_on:
+      - demo-nodejs
+    ports:
+      - $NGINX_PORT:$NGINX_PORT
+    expose:
+      - $NGINX_PORT
+    networks:
+      - default
+        
+  demo-nodejs:
+    container_name: demo-nodejs
+    restart: unless-stopped
+    env_file: ./.env
+    build:
+      context: ./nodejs
+      dockerfile: Dockerfile
+    volumes:
+      - ./nodejs/:/var/www/demo_nodejs
+      - /var/www/demo_nodejs/node_modules
+    depends_on:
+      - demo-mongo
+    ports:
+      - $NODEJS_HOST_PORT:$NODEJS_PORT
+    expose:
+      - $NODEJS_HOST_PORT
+    networks:
+      - default
+      
+volumes:
+  demo_db:
+networks:
+  default:
+    driver: bridge
