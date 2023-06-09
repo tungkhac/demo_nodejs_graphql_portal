@@ -54,7 +54,7 @@ const resolvers = {
     // Resolvers for Queries
     Query: {
         house: async (root, { id }, context) => {
-            return model.find(id);
+            return model.findById(id);
         },
         houses: async (root, args, context) => {
             return model.find();

@@ -7,9 +7,14 @@ This repository demo using NodeJS, MongooDB and graphQL.
 <details>
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#mongo">Mongo</a></li>
-    <li><a href="#nginx">Nginx</a></li>
-    <li><a href="#nodejs">NodeJS</a></li>
+    <li><a href="#setup">Setup</a></li>
+    <li><a href="#installation">Installation</a></li>
+        <ol>
+            <li><a href="#mongo">Mongo</a></li>
+            <li><a href="#nginx">Nginx</a></li>
+            <li><a href="#nodejs">NodeJS</a></li>
+        </ol>
+    <li><a href="#demo-with-graphql">Demo with GraphQL</a></li>
   </ol>
 </details>
 
@@ -34,14 +39,12 @@ It is possible to develop the front-end and back-end separately.
     $ docker-compose up -d
     ```
 
-4. Access Apolo server: <a href="http://demonodejs.local" target="_blank">http://demonodejs.local</a>
+4. Access Apolo server: `http://demonodejs.local`
 
 
 # Installation
-# 1. Technology Javascript, NodeJS, GraphQL, Apollo server
-
-
-# 2. Setup services with Docker Compose
+- Technology Javascript, NodeJS, GraphQL, Apollo server
+- Setup services with Docker Compose
 
 
 ## Mongo
@@ -55,7 +58,7 @@ It is possible to develop the front-end and back-end separately.
 #### Configure
 - MongoDB connect format 
     ```
-      mongodb://root:123456@demo-mongo:27017/demo?authSource=admin
+    mongodb://root:123456@demo-mongo:27017/demo?authSource=admin
     ```
 
 
@@ -69,7 +72,7 @@ Path: `/nginx/conf.d/`
 #### Setup the domain name in the server
 1. (demo with UBUNTU WSL in Window) Add line to `host` file
     ```
-      127.0.0.1	demonodejs.local
+    127.0.0.1	demonodejs.local
     ```
 2. Copy `nginx/demo_portal.nginx.conf` file to Nginx directory configuration path
     ```
@@ -95,3 +98,134 @@ Path: `/nginx/conf.d/`
     $ cp nodejs/.env.example nodejs/.env
     ```
 - Update `nodejs/.env` file
+
+
+
+# Demo with GraphQL
+
+- Access URL: `http://demonodejs.local`
+
+
+## Add an user. Use mutation function
+
+1. Operation
+
+    ```
+    mutation CreateUser($input: CreateUserInput!) {
+        createUser(input: $input) {
+            name
+            email
+            authority
+            address
+            status
+        }
+    }
+    ```
+
+2. Variables
+    ```
+    {
+        "input": {
+            "name": "TungNK",
+            "email": "tungnk.hn@gmail.com",
+            "password": "123456",
+            "authority": "admin",
+            "address": ["HaNoi", "VietNam"],
+            "status": "001",
+        }
+    }
+    ```
+
+3. Response
+    ```
+    {
+        "data": {
+            "createUser": {
+                "name": "TungNK",
+                "email": "tungnk.hn@gmail.com",
+                "authority": "admin",
+                "address": [
+                    "HaNoi",
+                    "VietNam"
+                ],
+                "status": "001"
+            }
+        }
+    }
+    ```
+
+
+## Get all user. Use query function
+
+1. Operation
+    ```
+    query Users {
+        users {
+            _id
+            name
+            email
+            authority
+            address
+            status
+        }
+    }
+    ```
+
+2.  Response
+    ```
+    {
+        "data": {
+            "users": [
+                {
+                    "_id": "648358edc4b3c174daa911fa",
+                    "name": "TungNK",
+                    "email": "tungnk.hn@gmail.com",
+                    "authority": "admin",
+                    "address": [
+                        "HaNoi",
+                        "VietNam"
+                    ],
+                    "status": "001"
+                }
+            ]
+        }
+    }
+    ```
+
+
+## Get by userID. Use query function
+
+1. Operation
+    ```
+    query User($userId: ID) {
+        user(id: $userId) {
+            _id
+            name
+            email
+            authority
+            status
+        }
+    }
+    ```
+
+2. Variables
+    ```
+    {
+        "userId": "648358edc4b3c174daa911fa"
+    }
+    ```
+
+3. Response
+    ```
+    {
+        "data": {
+            "user": {
+                "_id": "648358edc4b3c174daa911fa",
+                "name": "TungNK",
+                "email": "tungnk.hn@gmail.com",
+                "authority": "admin",
+                "status": "001"
+            }
+        }
+    }
+    ```

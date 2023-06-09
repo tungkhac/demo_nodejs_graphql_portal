@@ -54,7 +54,7 @@ const resolvers = {
     // Resolvers for Queries
     Query: {
         user: async (root, { id }, context) => {
-            return model.find(id);
+            return model.findById(id);
         },
         users: async (root, args, context) => {
             return model.find();
