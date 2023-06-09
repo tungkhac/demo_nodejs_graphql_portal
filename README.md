@@ -34,11 +34,14 @@ It is possible to develop the front-end and back-end separately.
     $ docker-compose up -d
     ```
 
+4. Access Apolo server: http://demonodejs.local
+
+
 # Installation
 # 1. Technology Javascript, NodeJS, GraphQL, Apollo server
 
 
-# 2. Setup services
+# 2. Setup services with Docker Compose
 
 
 ## Mongo
