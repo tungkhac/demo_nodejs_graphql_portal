@@ -34,7 +34,7 @@ It is possible to develop the front-end and back-end separately.
     $ docker-compose up -d
     ```
 
-4. Access Apolo server: http://demonodejs.local
+4. Access Apolo server: <a href="http://demonodejs.local" target="_blank">http://demonodejs.local</a>
 
 
 # Installation
